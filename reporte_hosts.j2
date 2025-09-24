@@ -1,0 +1,4 @@
+"Hostname", "Conectado", "Familia SO", "Distribución", "Versión SO", "Arquitectura", "vCPUs", "Memoria (MB)"
+{% for host in hosts_data %}
+"{{ host.hostname }}", "{{ host.conectado }}", "{{ host.os_family }}", "{{ host.ansible_distribution }}", "{{ host.ansible_distribution_version }}", "{{ host.ansible_machine_arch }}", "{{ host.ansible_processor_vcpus }}", "{{ host.ansible_memtotal_mb }}"
+{% endfor %}

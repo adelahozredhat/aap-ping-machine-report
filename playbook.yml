@@ -1,0 +1,73 @@
+- name: Generar reporte de inventario con todos los hosts
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Intentar ping y recolección de facts para Linux
+      ansible.builtin.setup:
+        filter: ansible_facts
+      ignore_unreachable: yes
+      ignore_errors: yes
+      register: host_facts
+      when: ansible_facts is not defined
+
+
+    - name: Realizar ping condicional
+      ansible.builtin.ping:
+      when: ansible_facts is defined and ansible_facts.os_family != 'Windows'
+      ignore_unreachable: yes
+      register: ping_result
+
+    - name: Intentar ping y recolección de facts para Windows
+      ansible.windows.win_ping:
+      ignore_unreachable: yes
+      ignore_errors: yes
+      register: win_ping_result
+      when: ansible_facts is defined and ansible_facts.os_family == 'Windows'
+
+    - name: Establecer facts predeterminados para hosts que no se conectan
+      ansible.builtin.set_fact:
+        host_status:
+          conectado: "No"
+          ansible_facts_data: {}
+      when: host_facts.failed is defined or win_ping_result.failed is defined or win_ping_result.failed is defined
+
+    - name: Establecer facts del host si la conexión fue exitosa
+      ansible.builtin.set_fact:
+        host_status:
+          conectado: "Sí"
+          ansible_facts_data: "{{ host_facts.ansible_facts | default({}) }}"
+      when: host_facts.failed is not defined and win_ping_result.failed is not defined
+
+    - name: Construir datos del host para el reporte
+      ansible.builtin.set_fact:
+        host_info:
+          hostname: "{{ inventory_hostname }}"
+          conectado: "{{ host_status.conectado }}"
+          os_family: "{{ host_status.ansible_facts_data['os_family'] | default('Desconocido') }}"
+          ansible_distribution: "{{ host_status.ansible_facts_data['distribution'] | default('N/A') }}"
+          ansible_distribution_version: "{{ host_status.ansible_facts_data['distribution_version'] | default('N/A') }}"
+          ansible_machine_arch: "{{ host_status.ansible_facts_data['architecture'] | default('N/A') }}"
+          ansible_processor_vcpus: "{{ host_status.ansible_facts_data['processor_vcpus'] | default('N/A') }}"
+          ansible_memtotal_mb: "{{ host_status.ansible_facts_data['memtotal_mb'] | default('N/A') }}"
+      run_once: true
+      delegate_to: localhost
+      loop: "{{ ansible_play_hosts }}"
+      loop_control:
+        loop_var: current_host
+
+    - name: Agregar datos del host a la lista
+      ansible.builtin.set_fact:
+        hosts_data: "{{ hosts_data + [ hostvars[current_host].host_info ] }}"
+      run_once: true
+      delegate_to: localhost
+      loop: "{{ ansible_play_hosts }}"
+      loop_control:
+        loop_var: current_host
+
+    - name: Generar reporte CSV a partir de la plantilla
+      ansible.builtin.template:
+        src: reporte_hosts.j2
+        dest: "./reporte_inventario_{{ ansible_date_time.iso8601 }}.csv"
+      run_once: true
+      delegate_to: localhost
