@@ -52,13 +52,6 @@
       loop_control:
         loop_var: current_host
 
-    - name: Generar reporte CSV a partir de la plantilla
-      ansible.builtin.template:
-        src: reporte_hosts.j2
-        dest: "./reporte_inventario_{{ ansible_date_time.iso8601 }}.csv"
-      run_once: true
-      delegate_to: localhost
-
     - debug:
         msg: "{{hostvars}}"
       delegate_to: localhost
