@@ -69,6 +69,12 @@
 
     - name: Agregar datos del host a la lista
       ansible.builtin.set_fact:
+        hosts_data: ""
+      run_once: true
+      delegate_to: localhost
+
+    - name: Agregar datos del host a la lista
+      ansible.builtin.set_fact:
         hosts_data: "{{ hosts_data + [ hostvars[current_host].host_info ] }}"
       run_once: true
       delegate_to: localhost
