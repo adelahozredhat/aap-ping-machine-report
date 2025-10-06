@@ -19,14 +19,16 @@
       ansible.windows.win_ping:
       ignore_errors: yes
       register: win_ping_result
-      when: guest is defined and guest.guestFamily is defined and guest.guestFamily == "windowsGuest"
+
+    - debug:
+        msg: "{{ping_result}}"
 
     - name: Recolección de facts
       ansible.builtin.setup:
       ignore_unreachable: yes
       ignore_errors: yes
       register: host_facts
-      when: guest is defined and guest.guestFamily is defined and guest.guestFamily == "linuxGuest"
+      when: not ping_result.failed or not win_ping_result.failed
 
     - debug:
         msg: "{{host_facts}}"
