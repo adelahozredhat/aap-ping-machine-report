@@ -47,7 +47,7 @@
           hostname: "{{ inventory_hostname }}"
           conectado: "{{ host_status.conectado }}"
           powerState: "{{ runtime.powerState | default('N/A')}}"
-          ipAddress: "{{ guest.ipAddress }}| default('N/A')"
+          ipAddress: "{{ summary.guest.ipAddress }}| default('N/A')"
           ansible_host: "{{ host_status.ansible_facts_data['ansible_host'] }}| default('N/A')"
           gateway: "{{ host_status.ansible_facts_data['ansible_default_ipv4.gateway'] }}| default('N/A')"
           os_family: "{{ host_status.ansible_facts_data['ansible_os_family'] | default('Desconocido') }}"
