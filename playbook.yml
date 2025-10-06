@@ -21,14 +21,14 @@
       ignore_unreachable: yes
       ignore_errors: yes
       register: host_facts
-      when: not ping_result.failed or not win_ping_result.failed
+      when: (ping_result is defined and not ping_result.failed) or (win_ping_result is defined and not win_ping_result.failed)
 
     - name: Establecer facts predeterminados para hosts que no se conectan
       ansible.builtin.set_fact:
         host_status:
           conectado: "No"
           ansible_facts_data: {}
-      when: ping_result.failed or win_ping_result.failed
+      when: (ping_result.failed is not defined or not ping_result.failed) and (win_ping_result.failed is not defined or not win_ping_result.failed)
 
     - name: Establecer facts del host si la conexión fue exitosa
       ansible.builtin.set_fact:
