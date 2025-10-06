@@ -9,15 +9,14 @@
 
     - name: Realizar ping condicional
       ansible.builtin.ping:
-      ignore_unreachable: yes
+      ignore_errors: yes
       register: ping_result
-      
+
     - debug:
         msg: "{{ping_result}}"
 
     - name: Intentar ping y recolección de facts para Windows
       ansible.windows.win_ping:
-      ignore_unreachable: yes
       ignore_errors: yes
       register: win_ping_result
       when: guest is defined and guest.guestFamily is defined and guest.guestFamily == "windowsGuest"
