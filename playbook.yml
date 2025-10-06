@@ -10,6 +10,11 @@
       ignore_errors: yes
       register: host_facts
 
+    - debug:
+        msg: "{{host_facts}}"
+
+    - debug:
+        msg: "{{ansible_facts}}"
 
     - name: Realizar ping condicional
       ansible.builtin.ping:
