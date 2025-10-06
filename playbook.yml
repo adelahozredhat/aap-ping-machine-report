@@ -6,11 +6,13 @@
 
     - name: Realizar ping condicional
       ansible.builtin.ping:
+      ignore_unreachable: yes
       ignore_errors: yes
       register: ping_result
 
     - name: Intentar ping y recolección de facts para Windows
       ansible.windows.win_ping:
+      ignore_unreachable: yes
       ignore_errors: yes
       register: win_ping_result
 
@@ -48,7 +50,7 @@
           ansible_memtotal_mb: "{{ host_status.ansible_facts_data['memtotal_mb'] | default('N/A') }}"
 
     - debug:
-        msg: "{{hostvars[inventory_hostname]}}"
+        msg: "{{hostvars[inventory_hostname].host_info}}"
       delegate_to: localhost
 
     - name: Generar reporte CSV a partir de la plantilla
