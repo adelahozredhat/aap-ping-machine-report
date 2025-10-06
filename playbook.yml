@@ -3,6 +3,9 @@
   gather_facts: no
 
   tasks:
+    
+    - debug:
+        var=hostvars[inventory_hostname]
 
     - name: Realizar ping condicional
       ansible.builtin.ping:
