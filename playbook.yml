@@ -4,24 +4,15 @@
 
   tasks:
 
-    - debug:
-        var=hostvars[inventory_hostname]
-
     - name: Realizar ping condicional
       ansible.builtin.ping:
       ignore_errors: yes
       register: ping_result
 
-    - debug:
-        msg: "{{ping_result}}"
-
     - name: Intentar ping y recolección de facts para Windows
       ansible.windows.win_ping:
       ignore_errors: yes
       register: win_ping_result
-
-    - debug:
-        msg: "{{ping_result}}"
 
     - name: Recolección de facts
       ansible.builtin.setup:
@@ -29,12 +20,6 @@
       ignore_errors: yes
       register: host_facts
       when: not ping_result.failed or not win_ping_result.failed
-
-    - debug:
-        msg: "{{host_facts}}"
-
-    - debug:
-        msg: "{{ansible_facts}}"
 
     - name: Establecer facts predeterminados para hosts que no se conectan
       ansible.builtin.set_fact:
@@ -67,20 +52,16 @@
       loop_control:
         loop_var: current_host
 
-    - name: Agregar datos del host a la lista
-      ansible.builtin.set_fact:
-        hosts_data: ""
+    - name: Generar reporte CSV a partir de la plantilla
+      ansible.builtin.template:
+        src: reporte_hosts.j2
+        dest: "./reporte_inventario_{{ ansible_date_time.iso8601 }}.csv"
       run_once: true
       delegate_to: localhost
 
-    - name: Agregar datos del host a la lista
-      ansible.builtin.set_fact:
-        hosts_data: "{{ hosts_data + [ hostvars[current_host].host_info ] }}"
-      run_once: true
+    - debug:
+        msg: "{{hostvars}}"
       delegate_to: localhost
-      loop: "{{ ansible_play_hosts }}"
-      loop_control:
-        loop_var: current_host
 
     - name: Generar reporte CSV a partir de la plantilla
       ansible.builtin.template:
