@@ -50,6 +50,13 @@
           ansible_memtotal_mb: "{{ host_status.ansible_facts_data['memtotal_mb'] | default('N/A') }}"
 
     - debug:
+        msg: "{{item}}"
+      loop: "{{hostvars.keys()}}"
+      run_once: true
+      delegate_to: localhost
+
+
+    - debug:
         msg: "{{hostvars[item].host_info}}"
       loop: "{{hostvars.keys()}}"
       run_once: true
