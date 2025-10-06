@@ -50,7 +50,9 @@
           ansible_memtotal_mb: "{{ host_status.ansible_facts_data['memtotal_mb'] | default('N/A') }}"
 
     - debug:
-        msg: "{{hostvars[inventory_hostname].host_info}}"
+        msg: "{{hostvars[item].host_info}}"
+      loop: "{{hostvars.keys()}}"
+      run_once: true
       delegate_to: localhost
 
     - name: Generar reporte CSV a partir de la plantilla
