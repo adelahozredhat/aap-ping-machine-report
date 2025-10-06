@@ -41,14 +41,14 @@
         host_status:
           conectado: "No"
           ansible_facts_data: {}
-      when: host_facts.failed is defined or win_ping_result.failed is defined or win_ping_result.failed is defined
+      when: ping_result.failed or win_ping_result.failed
 
     - name: Establecer facts del host si la conexión fue exitosa
       ansible.builtin.set_fact:
         host_status:
           conectado: "Sí"
           ansible_facts_data: "{{ host_facts.ansible_facts | default({}) }}"
-      when: host_facts.failed is not defined and win_ping_result.failed is not defined
+      when: ping_result.failed or win_ping_result.failed
 
     - name: Construir datos del host para el reporte
       ansible.builtin.set_fact:
