@@ -46,8 +46,8 @@
         host_info:
           hostname: "{{ inventory_hostname }}"
           conectado: "{{ host_status.conectado }}"
-          powerState: "{{ hostvars[inventory_hostname]["runtime.powerState"] | default('N/A')}}"
-          ipAddress: "{{ hostvars[inventory_hostname]["summary.guest.ipAddress"] }}| default('N/A')"
+          powerState: "{{ hostvars[inventory_hostname]['runtime.powerState'] | default('N/A')}}"
+          ipAddress: "{{ hostvars[inventory_hostname]['summary.guest.ipAddress'] }}| default('N/A')"
           ansible_host: "{{ host_status.ansible_facts_data['ansible_host'] }}| default('N/A')"
           gateway: "{{ host_status.ansible_facts_data['ansible_default_ipv4.gateway'] }}| default('N/A')"
           os_family: "{{ host_status.ansible_facts_data['ansible_os_family'] | default('Desconocido') }}"
@@ -59,7 +59,7 @@
           ansible_machine_arch: "{{ host_status.ansible_facts_data['ansible_architecture'] | default('N/A') }}"
           ansible_processor_vcpus: "{{ host_status.ansible_facts_data['ansible_processor_vcpus'] | default('N/A') }}"
           ansible_memtotal_mb: "{{ host_status.ansible_facts_data['ansible_memtotal_mb'] | default('N/A') }}"
-          toolsStatus: "{{ hostvars[inventory_hostname]["guest.toolsStatus"] | default('N/A') }}"
+          toolsStatus: "{{ hostvars[inventory_hostname]['guest.toolsStatus'] | default('N/A') }}"
 
     - name: Generar reporte CSV a partir de la plantilla
       ansible.builtin.template:
