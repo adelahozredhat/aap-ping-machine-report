@@ -9,7 +9,6 @@
       ignore_unreachable: yes
       ignore_errors: yes
       register: host_facts
-      when: ansible_facts is not defined
 
 
     - name: Realizar ping condicional
