@@ -46,12 +46,20 @@
         host_info:
           hostname: "{{ inventory_hostname }}"
           conectado: "{{ host_status.conectado }}"
-          os_family: "{{ host_status.ansible_facts_data['os_family'] | default('Desconocido') }}"
-          ansible_distribution: "{{ host_status.ansible_facts_data['distribution'] | default('N/A') }}"
-          ansible_distribution_version: "{{ host_status.ansible_facts_data['distribution_version'] | default('N/A') }}"
-          ansible_machine_arch: "{{ host_status.ansible_facts_data['architecture'] | default('N/A') }}"
-          ansible_processor_vcpus: "{{ host_status.ansible_facts_data['processor_vcpus'] | default('N/A') }}"
-          ansible_memtotal_mb: "{{ host_status.ansible_facts_data['memtotal_mb'] | default('N/A') }}"
+          powerState: "{{ runtime.powerState | default('N/A')}}"
+          ipAddress: "{{ guest.ipAddress }}| default('N/A')"
+          ansible_host: "{{ host_status.ansible_facts_data['ansible_host'] }}| default('N/A')"
+          gateway: "{{ host_status.ansible_facts_data['ansible_default_ipv4.gateway'] }}| default('N/A')"
+          os_family: "{{ host_status.ansible_facts_data['ansible_os_family'] | default('Desconocido') }}"
+          ansible_distribution: "{{ host_status.ansible_facts_data['ansible_distribution'] | default('N/A') }}"
+          ansible_distribution_version: "{{ host_status.ansible_facts_data['ansible_distribution_version'] | default('N/A') }}"
+          ansible_kernel: "{{ ost_status.ansible_facts_data['ansible_kernel'] | default('N/A')}}"
+          ansible_selinux: "{{ ost_status.ansible_facts_data['ansible_selinux.mode'] | default('N/A')}}"
+          ansible_selinux: "{{ ost_status.ansible_facts_data['ansible_selinux.mode'] | default('N/A')}}"
+          ansible_machine_arch: "{{ host_status.ansible_facts_data['ansible_architecture'] | default('N/A') }}"
+          ansible_processor_vcpus: "{{ host_status.ansible_facts_data['ansible_processor_vcpus'] | default('N/A') }}"
+          ansible_memtotal_mb: "{{ host_status.ansible_facts_data['ansible_memtotal_mb'] | default('N/A') }}"
+          toolsStatus: "{{ guest.toolsStatus | default('N/A') }}"
 
     - name: Generar reporte CSV a partir de la plantilla
       ansible.builtin.template:
