@@ -46,11 +46,6 @@
           ansible_machine_arch: "{{ host_status.ansible_facts_data['architecture'] | default('N/A') }}"
           ansible_processor_vcpus: "{{ host_status.ansible_facts_data['processor_vcpus'] | default('N/A') }}"
           ansible_memtotal_mb: "{{ host_status.ansible_facts_data['memtotal_mb'] | default('N/A') }}"
-      run_once: true
-      delegate_to: localhost
-      loop: "{{ ansible_play_hosts }}"
-      loop_control:
-        loop_var: current_host
 
     - debug:
         msg: "{{hostvars}}"
