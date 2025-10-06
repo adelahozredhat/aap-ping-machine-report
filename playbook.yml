@@ -37,6 +37,10 @@
           ansible_facts_data: "{{ host_facts.ansible_facts | default({}) }}"
       when: ping_result.failed or win_ping_result.failed
 
+    - debug:
+        msg: "{{host_status.ansible_facts_data}}"
+      delegate_to: localhost
+
     - name: Construir datos del host para el reporte
       ansible.builtin.set_fact:
         host_info:
@@ -49,38 +53,12 @@
           ansible_processor_vcpus: "{{ host_status.ansible_facts_data['processor_vcpus'] | default('N/A') }}"
           ansible_memtotal_mb: "{{ host_status.ansible_facts_data['memtotal_mb'] | default('N/A') }}"
 
-    - debug:
-        msg: "{{item}}"
-      loop: "{{hostvars.keys()}}"
-      run_once: true
-      delegate_to: localhost
-
-
-    - debug:
-        msg: "{{hostvars[item].host_info| default('N/A')}}"
-      loop: "{{hostvars.keys()}}"
-      run_once: true
-      delegate_to: localhost
-
     - name: Generar reporte CSV a partir de la plantilla
       ansible.builtin.template:
         src: reporte_hosts.j2
         dest: "./reporte_inventario_{{ ansible_date_time.iso8601 }}.csv"
       register: template
       run_once: true
-      delegate_to: localhost
-
-    - debug:
-        msg: "{{template}}"
-      delegate_to: localhost
-
-    - name: Run a command using a templated variable (always use quote filter to avoid injection)
-      ansible.builtin.shell: "cat ./reporte_inventario_{{ ansible_date_time.iso8601 }}.csv"
-      register: cat_register
-      delegate_to: localhost
-
-    - debug:
-        msg: "{{cat_register}}"
       delegate_to: localhost
 
     - name: Send the notification email
