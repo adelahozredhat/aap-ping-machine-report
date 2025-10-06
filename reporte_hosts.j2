@@ -1,5 +1,4 @@
 "Hostname", "Conectado", "Familia SO", "Distribución", "Versión SO", "Arquitectura", "vCPUs", "Memoria (MB)"
 {% for host in hostvars.keys() %}
-"{{ host }}"
-"{{ hostvars[host] }}"
+"{{ hostvars[host].host_info.hostname }}", "{{ hostvars[host].host_info.conectado }}", "{{ hostvars[host].host_info.os_family }}", "{{ hostvars[host].host_info.ansible_distribution }}", "{{ hostvars[host].host_info.ansible_distribution_version }}", "{{ hostvars[host].host_info.ansible_machine_arch }}", "{{ hostvars[host].host_info.ansible_processor_vcpus }}", "{{ hostvars[host].host_info.ansible_memtotal_mb }}"
 {% endfor %}
