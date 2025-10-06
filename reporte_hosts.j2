@@ -1,4 +1,5 @@
 "Hostname", "Conectado", "Familia SO", "Distribución", "Versión SO", "Arquitectura", "vCPUs", "Memoria (MB)"
 {% for host in hostvars.keys() %}
+"{{ host }}"
 "{{ hostvars[host] }}"
 {% endfor %}

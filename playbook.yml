@@ -67,4 +67,25 @@
 
     - name: Run a command using a templated variable (always use quote filter to avoid injection)
       ansible.builtin.shell: "cat ./reporte_inventario_{{ ansible_date_time.iso8601 }}.csv"
+      register: cat_register
       delegate_to: localhost
+
+    - debug:
+        msg: "{{cat_register}}"
+      delegate_to: localhost
+
+    - name: Send the notification email
+      community.general.mail:
+        host: "{{ mail_host }}"        # Injected from the custom credential
+        port: "{{ mail_port }}"        # Injected from the custom credential
+        username: "{{ mail_username }}"  # Injected from the custom credential
+        password: "{{ mail_password }}"  # Injected from the custom credential
+        to: "{{ mail_to }}"
+        subject: "Reporte execution"
+        body: "The reporte automation job has successfully finished."
+        secure: starttls
+        attach:
+          - "./reporte_inventario_{{ ansible_date_time.iso8601 }}.csv"
+        secure: starttls
+      delegate_to: localhost
+      run_once: true
