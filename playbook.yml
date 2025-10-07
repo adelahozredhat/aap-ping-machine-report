@@ -20,10 +20,9 @@
       ansible.builtin.setup:
       ignore_unreachable: yes
       ignore_errors: yes
-      register: host_facts
 
     - debug:
-        msg: "{{host_facts}}"
+        msg: "{{ansible_facts}}"
 
     - name: Establecer facts predeterminados para hosts que no se conectan
       ansible.builtin.set_fact:
@@ -36,7 +35,7 @@
       ansible.builtin.set_fact:
         host_status:
           conectado: "Sí"
-          ansible_facts_data: "{{ host_facts.ansible_facts | default({}) }}"
+          ansible_facts_data: "{{ ansible_facts | default({}) }}"
       when: (ping_result.failed is defined and not ping_result.failed) or (win_ping_result.failed is defined and not win_ping_result.failed)
 
     - debug:
