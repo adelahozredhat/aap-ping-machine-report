@@ -105,3 +105,13 @@
         secure: starttls
       delegate_to: localhost
       run_once: true
+
+    - name: Add virtual machine custom attributes
+      community.vmware.vmware_guest_custom_attributes:
+        uuid: "{{ hostvars[inventory_hostname]['config.uuid'] | default('N/A')}}"
+        state: present
+        attributes:
+          - name: PRUEBA
+            value: PRUEBA
+      delegate_to: localhost
+      when: hostvars[inventory_hostname]['config.uuid'] is defined
