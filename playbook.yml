@@ -41,6 +41,25 @@
         msg: "{{host_status.ansible_facts_data}}"
       delegate_to: localhost
 
+    - name: Find the 'key' value for 'AnsibleGroup'
+      set_fact:
+        ansible_group_key: "{{ hostvars[inventory_hostname]['availableField'] | selectattr('name', 'equalto', 'AnsibleGroup') | map(attribute='key') | first }}"
+      when: hostvars[inventory_hostname]['availableField'] is defined
+
+    - name: Display the extracted key
+      debug:
+        msg: "The key for AnsibleGroup is: {{ ansible_group_key| default('N/A') }}"
+
+    - name: Find the 'value' using the extracted 'key'
+      set_fact:
+        ansible_group_value: "{{ ostvars[inventory_hostname]['customValue'] | selectattr('key', 'equalto', ansible_group_key) | map(attribute='value') | first }}"
+      when: ansible_group_key is defined
+
+    - name: Display the extracted value
+      debug:
+        msg: "The value for the key {{ ansible_group_key }} is: {{ ansible_group_value }}"
+      when: ansible_group_value is defined
+
     - name: Construir datos del host para el reporte
       ansible.builtin.set_fact:
         host_info:
