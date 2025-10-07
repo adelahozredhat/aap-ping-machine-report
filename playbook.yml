@@ -20,6 +20,7 @@
       ansible.builtin.setup:
       ignore_unreachable: yes
       ignore_errors: yes
+      register: host_facts
 
     - name: Establecer facts predeterminados para hosts que no se conectan
       ansible.builtin.set_fact:
