@@ -43,7 +43,7 @@
 
     - name: Find the 'key' value for 'AnsibleGroup'
       set_fact:
-        ansible_group_key: "{{ hostvars[inventory_hostname]['availableField'] | selectattr('name', 'equalto', 'AnsibleGroup') | map(attribute='key') | first }}"
+        ansible_group_key: "{{ hostvars[inventory_hostname]['availableField'] | selectattr('name', 'equalto', 'AnsibleGroup') | map(attribute='key') | default(['N/A']) | first }}"
       when: hostvars[inventory_hostname]['availableField'] is defined
 
     - name: Display the extracted key
@@ -52,7 +52,7 @@
 
     - name: Find the 'value' using the extracted 'key'
       set_fact:
-        ansible_group_value: "{{ hostvars[inventory_hostname]['customValue']  }}"
+        ansible_group_value: "{{ hostvars[inventory_hostname]['customValue'] | selectattr('name', 'equalto', 'AnsibleGroup') | map(attribute='key') | default(['N/A']) | first }}"
       when: ansible_group_key is defined
 
     - name: Display the extracted value
