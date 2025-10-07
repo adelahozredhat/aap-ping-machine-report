@@ -52,7 +52,7 @@
 
     - name: Find the 'value' using the extracted 'key'
       set_fact:
-        ansible_group_value: "{{ hostvars[inventory_hostname]['customValue'] | selectattr('key', 'equalto', ansible_group_key) | map(attribute='value') | first }}"
+        ansible_group_value: "{{ hostvars[inventory_hostname]['customValue'] | selectattr('key', 'equalto', ansible_group_key)  }}"
       when: ansible_group_key is defined
 
     - name: Display the extracted value
