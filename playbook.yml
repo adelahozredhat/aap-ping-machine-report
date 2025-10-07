@@ -22,6 +22,9 @@
       ignore_errors: yes
       register: host_facts
 
+    - debug:
+        msg: "{{host_facts}}"
+
     - name: Establecer facts predeterminados para hosts que no se conectan
       ansible.builtin.set_fact:
         host_status:
