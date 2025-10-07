@@ -20,6 +20,9 @@
       ansible.builtin.setup:
       ignore_unreachable: yes
       ignore_errors: yes
+      delegate_to: "{{ item }}"
+      delegate_facts: true
+      loop: "{{ groups['all'] }}"
 
     - debug:
         msg: "{{ansible_facts}}"
