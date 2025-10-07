@@ -28,7 +28,7 @@
         host_status:
           conectado: "No"
           ansible_facts_data: {}
-      when: (ping_result.failed is not defined or not ping_result.failed) and (win_ping_result.failed is not defined or not win_ping_result.failed)
+      when: (ping_result.failed is not defined or ping_result.failed) and (win_ping_result.failed is not defined or win_ping_result.failed)
 
     - name: Establecer facts del host si la conexión fue exitosa
       ansible.builtin.set_fact:
@@ -52,7 +52,7 @@
 
     - name: Find the 'value' using the extracted 'key'
       set_fact:
-        ansible_group_value: "{{ hostvars[inventory_hostname]['customValue'] | selectattr('key', 'equalto', ansible_group_key)  }}"
+        ansible_group_value: "{{ hostvars[inventory_hostname]['customValue']  }}"
       when: ansible_group_key is defined
 
     - name: Display the extracted value
