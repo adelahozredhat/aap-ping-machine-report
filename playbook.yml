@@ -54,8 +54,8 @@
 
     - name: Find the 'value' using the extracted 'key'
       set_fact:
-        ansible_group_value: "{{ hostvars[inventory_hostname]['customValue'] | selectattr('key', 'equalto', ansible_group_key| int) | map(attribute='value') | first | default('N/A') }}"
-      when: ansible_group_key is defined and ansible_group_key != "N/A"
+        ansible_group_value: "{{ hostvars[inventory_hostname]['value'] | selectattr('key', 'equalto', ansible_group_key| int) | map(attribute='value') | first | default('N/A') }}"
+      when: ansible_group_key is defined and hostvars[inventory_hostname]['value'] is defines and ansible_group_key != "N/A"
 
     - name: Display the extracted value
       debug:
