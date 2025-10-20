@@ -68,7 +68,7 @@
           hostname: "{{ inventory_hostname }}"
           conectado: "{{ host_status.conectado }}"
           powerState: "{{ hostvars[inventory_hostname]['runtime.powerState'] | default('N/A')}}"
-          ipAddress: "{{ hostvars[inventory_hostname]['guest.ipAddress'] }}| default('N/A')}}"  
+          ipAddress: "{{ hostvars[inventory_hostname]['guest.ipAddress']| default('N/A')}}"  
           ansible_distribution: "{{ host_status.ansible_facts_data['ansible_distribution'] | default('N/A') }}"
           ansible_distribution_version: "{{ host_status.ansible_facts_data['ansible_distribution_version'] | default('N/A') }}"
           num_cpu: "{{ hostvars[inventory_hostname]['config.hardware.numCPU'] | default('N/A')}}"
@@ -122,7 +122,7 @@
 
     - name: Add virtual machine custom attributes
       community.vmware.vmware_guest_custom_attributes:
-        uuid: "{{ hostvars[inventory_hostname]['config.uuid'] | default('N/A')}}"
+        uuid: "{{ hostvars[inventory_hostname]['config.uuid']}}"
         state: present
         attributes:
           - name: PRUEBA
