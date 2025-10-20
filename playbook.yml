@@ -107,7 +107,7 @@
     - name: Send the notification email
       community.general.mail:
         host: "{{ mail_host }}"        # Injected from the custom credential
-        port: {{ mail_port }}        # Injected from the custom credential
+        port: "{{ mail_port |int }}"        # Injected from the custom credential
         username: "{{ mail_username }}"  # Injected from the custom credential
         password: "{{ mail_password }}"  # Injected from the custom credential
         to: "{{ mail_to }}"
